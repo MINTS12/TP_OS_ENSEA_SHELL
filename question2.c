@@ -13,8 +13,20 @@ void execute_one_simple_command(char *buffer){
         //Read the input user
         bytes_read = read(STDIN_FILENO, buffer, MAX_CMD_SIZE);
 
+        // GESTION CTRL+D
+        if (bytes_read == 0) {
+            write(STDOUT_FILENO, BYE_MSG, strlen(BYE_MSG));
+            break; 
+        }
+
         // the -1 
         buffer[bytes_read - 1] = '\0';
+
+        //if the user typed exit 
+        if (strcmp(buffer, "exit") == 0) {
+            write(STDOUT_FILENO, BYE_MSG, strlen(BYE_MSG));
+            break;
+        }
 
         // The pqrt of the code that excutes the commande
         pid = fork();

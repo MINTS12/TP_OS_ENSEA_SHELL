@@ -9,6 +9,8 @@
 // constant for the buffer
 #define MAX_CMD_SIZE 1024
 #define ERROR_FORK "Error: fork failed\n"
+// added a mssg for exiting for q3
+#define BYE_MSG "Bye bye...\n"
 
 void execute_one_simple_command(char *buffer);
 
