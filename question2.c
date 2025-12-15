@@ -1,12 +1,18 @@
+#define _POSIX_C_SOURCE 199309L
 #include "question1.h"
 #include "question2.h"
 #include "question4.h"
+#include <time.h>
+
 
 
 void execute_one_simple_command(char *buffer){
     int status;
     pid_t pid;
     ssize_t bytes_read;
+
+    struct timespec start, end;
+    long elapsed_ms = 0;
 
     // to check if it's the first time to enter the loop
 
@@ -20,7 +26,7 @@ void execute_one_simple_command(char *buffer){
             first_return = 0 ;
         }
         else{
-            show_status_prompt(status);
+            show_status_prompt(status , elapsed_ms);
         }
 
         
@@ -43,6 +49,9 @@ void execute_one_simple_command(char *buffer){
             break;
         }
 
+        //Start the clock
+        clock_gettime(CLOCK_REALTIME , &start);
+
         // The pqrt of the code that excutes the commande
         pid = fork();
 
@@ -64,6 +73,10 @@ void execute_one_simple_command(char *buffer){
 
          else {
             wait(&status);
+            //Stop the clock 
+            clock_gettime(CLOCK_REALTIME , &end);
+            //Calculate the period
+            elapsed_ms = (end.tv_sec - start.tv_sec) * 1000 +  (end.tv_nsec - start.tv_nsec) / 1000000;
         }
     }
 }

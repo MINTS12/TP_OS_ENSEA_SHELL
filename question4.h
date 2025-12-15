@@ -9,6 +9,8 @@
 
 #define MAX_STATUS_SIZE 180
 
-void show_status_prompt(int status);
+
+
+void show_status_prompt(int status, long period_ms);
 
 #endif
