@@ -1,14 +1,29 @@
 #include "question1.h"
 #include "question2.h"
+#include "question4.h"
 
 
 void execute_one_simple_command(char *buffer){
     int status;
     pid_t pid;
     ssize_t bytes_read;
+
+    // to check if it's the first time to enter the loop
+
+    int first_return = 1 ;
+
+
     while (1) {
 
-        show_prompt();
+        if(first_return){
+            show_prompt();
+            first_return = 0 ;
+        }
+        else{
+            show_status_prompt(status);
+        }
+
+        
 
         //Read the input user
         bytes_read = read(STDIN_FILENO, buffer, MAX_CMD_SIZE);
