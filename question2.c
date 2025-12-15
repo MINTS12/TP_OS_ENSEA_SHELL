@@ -4,12 +4,13 @@
 #include "question4.h"
 #include "question6.h"
 #include "question7.h"
+#include "question8.h"
 #include <time.h>
 
 
 
 void execute_one_simple_command(char *buffer){
-    int status;
+    int status = 0;
     pid_t pid;
     ssize_t bytes_read;
 
@@ -53,11 +54,21 @@ void execute_one_simple_command(char *buffer){
             break;
         }
 
-        // the function that cuts the complex command 
-        parse_arguments(buffer, argv);
+       
 
         //Start the clock
         clock_gettime(CLOCK_REALTIME , &start);
+
+
+        int pipe_result = execute_pipe_command(buffer);
+
+        //if it's a pipe command
+        if (pipe_result != -1) {
+            status = pipe_result;
+        }
+        else{
+
+            parse_arguments(buffer, argv);
 
         // The pqrt of the code that excutes the commande
         pid = fork();
@@ -82,10 +93,17 @@ void execute_one_simple_command(char *buffer){
 
          else {
             wait(&status);
-            //Stop the clock 
+
+            if (WIFEXITED(status)) {
+                    status = WEXITSTATUS(status);
+                }
+            
+        }
+    }
+
+    //Stop the clock 
             clock_gettime(CLOCK_REALTIME , &end);
             //Calculate the period
             elapsed_ms = (end.tv_sec - start.tv_sec) * 1000 +  (end.tv_nsec - start.tv_nsec) / 1000000;
-        }
-    }
+}
 }
