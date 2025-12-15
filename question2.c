@@ -2,6 +2,7 @@
 #include "question1.h"
 #include "question2.h"
 #include "question4.h"
+#include "question6.h"
 #include <time.h>
 
 
@@ -17,6 +18,8 @@ void execute_one_simple_command(char *buffer){
     // to check if it's the first time to enter the loop
 
     int first_return = 1 ;
+
+    char *argv[MAX_ARGS];
 
 
     while (1) {
@@ -49,6 +52,9 @@ void execute_one_simple_command(char *buffer){
             break;
         }
 
+        // the function that cuts the complex command 
+        parse_arguments(buffer, argv);
+
         //Start the clock
         clock_gettime(CLOCK_REALTIME , &start);
 
@@ -64,7 +70,7 @@ void execute_one_simple_command(char *buffer){
 
         if (pid == 0) {
 
-            execlp(buffer, buffer, (char *)NULL);
+            execvp(argv[0], argv);
 
             char *error_msg = "Command not found\n";
             write(STDOUT_FILENO, error_msg, strlen(error_msg));
