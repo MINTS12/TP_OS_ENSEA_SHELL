@@ -3,6 +3,7 @@
 #include "question2.h"
 #include "question4.h"
 #include "question6.h"
+#include "question7.h"
 #include <time.h>
 
 
@@ -69,6 +70,8 @@ void execute_one_simple_command(char *buffer){
 
 
         if (pid == 0) {
+
+            manage_redirections(argv);
 
             execvp(argv[0], argv);
 
